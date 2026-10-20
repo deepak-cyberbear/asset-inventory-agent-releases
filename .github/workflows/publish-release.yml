@@ -28,10 +28,11 @@ jobs:
           fi
           test -s vulnerability-agent-linux-amd64
           test -s vulnerability-agent-linux-arm64
+          test -s install-agent-setup.tar.gz
           test -s SHA256SUMS
           sha256sum --check SHA256SUMS
           mkdir -p dist
-          cp vulnerability-agent-linux-amd64 vulnerability-agent-linux-arm64 SHA256SUMS dist/
+          cp vulnerability-agent-linux-amd64 vulnerability-agent-linux-arm64 install-agent-setup.tar.gz SHA256SUMS dist/
           echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Create or update GitHub Release
         env:
@@ -42,6 +43,7 @@ jobs:
           assets=(
             dist/vulnerability-agent-linux-amd64
             dist/vulnerability-agent-linux-arm64
+            dist/install-agent-setup.tar.gz
             dist/SHA256SUMS
           )
           if gh release view "$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
@@ -51,5 +53,5 @@ jobs:
               --repo "$GITHUB_REPOSITORY" \
               --target main \
               --title "$VERSION" \
-              --notes "Public Ubuntu agent binaries mirrored from the private source release $VERSION."
+              --notes "Public Ubuntu agent binaries and installer package mirrored from the private source release $VERSION."
           fi
