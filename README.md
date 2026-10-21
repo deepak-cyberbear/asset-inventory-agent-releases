@@ -16,11 +16,13 @@ Run this command on the target Ubuntu VM:
 curl -fsSL https://github.com/deepak-cyberbear/asset-inventory-agent-releases/releases/latest/download/install.sh | sudo bash
 ```
 
-On first install, the script prompts for the backend API URL and the
-`AGENT_UPLOAD_TOKEN` (hidden input), then saves that configuration for systemd.
-It defaults the device ID to the VM hostname. Re-running the command upgrades
-to the latest release and preserves existing configuration. Pass `--reconfigure`
-to replace it, with `--api-url` and `--device-id` to set specific values:
+On first install, the script configures the Azure pilot API at
+`https://vul-mvp-api.jollyflower-3d0dfe1b.centralindia.azurecontainerapps.io`
+and uses the VM hostname as its device ID. It saves the configuration for
+systemd and does not ask for an upload token. Re-running the command upgrades
+to the latest release and preserves existing configuration. Pass
+`--reconfigure` to replace it, with `--api-url` and `--device-id` to set
+specific values:
 
 ```bash
 curl -fsSL https://github.com/deepak-cyberbear/asset-inventory-agent-releases/releases/latest/download/install.sh | sudo bash -s -- --reconfigure --api-url https://catalog.example
@@ -28,4 +30,8 @@ curl -fsSL https://github.com/deepak-cyberbear/asset-inventory-agent-releases/re
 
 The VM needs `curl`, `tar`, Python 3, systemd, and outbound access to GitHub and
 the backend. The installer verifies release checksums before installing the
-binary. Source code remains in the private repository.
+binary. The API URL can also be overridden with `--api-url` or the `API_URL`
+environment variable. The Azure pilot accepts uploads on public HTTPS ingress without
+application-level authentication; anyone can submit a report and choose its
+device ID. The operator UI remains protected by Microsoft Entra. Source code
+remains in the private repository.
